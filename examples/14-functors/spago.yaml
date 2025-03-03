@@ -1,0 +1,19 @@
+package:
+  dependencies:
+    - aff
+    - argonaut-generic
+    - console
+    - graphql-client
+    - maybe
+    - newtype
+    - prelude
+    - typelevel-lists
+  name: my-project
+workspace:
+  extraPackages:
+    graphql-client:
+      path: ../..
+    argonaut-codecs:
+      path: ../../../purescript-argonaut-codecs
+  packageSet:
+    registry: 20.0.3

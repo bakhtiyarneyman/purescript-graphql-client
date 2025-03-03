@@ -1,0 +1,29 @@
+{
+  "name": "14-functors",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.mjs",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "npm i && spago install && spago build && node ./test.mjs",
+    "start": "node server.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@urql/core": "^1.16.2",
+    "express": "^4.17.1",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.4.0",
+    "graphql-ws": "^6.0.4",
+    "isomorphic-unfetch": "^4.0.2",
+    "isomorphic-ws": "^4.0.1",
+    "mkdirp": "^3.0.1",
+    "xhr2": "^0.2.0"
+  },
+  "devDependencies": {
+    "exec-sh": "^0.4.0"
+  }
+}
