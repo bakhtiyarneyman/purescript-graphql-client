@@ -69,6 +69,7 @@ import GraphQL.Client.ArrayOf (ArrayOf(..))
 import GraphQL.Client.Directive (ApplyDirective(..))
 import GraphQL.Client.ErrorBoundary (ErrorBoundary(..))
 import GraphQL.Client.NullArray (NullArray)
+import GraphQL.Client.Skip (Skip)
 import GraphQL.Client.Union (GqlUnion(..))
 import GraphQL.Client.Variable (Var)
 import GraphQL.Client.Variables (WithVars, getQuery)
@@ -189,6 +190,9 @@ instance propToGqlStringAlias ::
         }
           `List.Cons`
             kvs
+else instance propToGqlStringSkip ::
+  FoldingWithIndex PropToGqlString (Proxy sym) KeyVals Skip KeyVals where
+  foldingWithIndex _ _ kvs _ = kvs
 else instance propToGqlString ::
   ( GqlQueryString a
   , IsSymbol sym

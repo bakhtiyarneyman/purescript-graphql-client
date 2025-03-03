@@ -13,6 +13,7 @@ import GraphQL.Client.ArrayOf (arrayOf)
 import GraphQL.Client.Directive (applyDir)
 import GraphQL.Client.NullArray (NullArray(..))
 import GraphQL.Client.QueryReturns (class QueryReturns, queryReturns)
+import GraphQL.Client.Skip (Skip(..))
 import Type.Proxy (Proxy(..))
 
 -- TYPE LEVEL TESTS
@@ -410,6 +411,19 @@ testIdentityOfArray =
             [ { int: 0 } ] +++ ((ArgR [ ignoreOrStr true, ignoreOrStr false ]) :: OrArg IgnoreArg _)
         }
           =>> Identity { id }
+    }
+
+testSkip
+  :: Proxy
+       { users ::
+          Array
+             { id :: Int
+             , name :: Maybe String
+             }
+       }
+testSkip =
+  queryReturns testSchemaProxy
+    {  users: { id, name: Skip }
     }
 
 ignoreOrStr

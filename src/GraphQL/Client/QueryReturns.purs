@@ -10,7 +10,7 @@ import Prelude
 
 import Data.Const (Const(..))
 import Data.Identity (Identity(..))
-import Data.Maybe (Maybe)
+import Data.Maybe (Maybe(..))
 import Data.Newtype (class Newtype, unwrap)
 import Data.Symbol (class IsSymbol)
 import GraphQL.Client.Alias (Alias(..))
@@ -21,6 +21,7 @@ import GraphQL.Client.AsGql (AsGql)
 import GraphQL.Client.Directive (ApplyDirective)
 import GraphQL.Client.ErrorBoundary (BoundaryResult, ErrorBoundary)
 import GraphQL.Client.ErrorBoundary as ErrorBoundary
+import GraphQL.Client.Skip (Skip)
 import GraphQL.Client.Union (GqlUnion, UnionReturned)
 import GraphQL.Client.Variable (Var)
 import GraphQL.Client.Variables (WithVars)
@@ -158,6 +159,23 @@ else instance propToSchemaTypeProxyAlias ::
       subSchema = Record.get val schema
     in
       queryReturnsAtImpl (Proxy :: _ sym) subSchema val
+else instance propToSchemaTypeSkip ::
+  ( IsSymbol sym
+  , Row.Cons sym subSchema rest schema
+  , QueryReturnsAt sym subSchema (Proxy val) returns
+  ) =>
+  -- It would have been great to encode the return value with something like
+  -- `data Skipped a = Skipped` instead of a plain `Maybe`, but we ultimately depend
+  -- on the `argonaut`'s `DecodeJsonField` class to skip decoding this field, and its instance
+  -- is a chain we have no control over.
+  --
+  -- It's not that bad because the user would always discard the value anyway, but the intent is
+
+  --
+  -- Another alternative to this wart would be to hack the `decode*` functions to pre-inject the
+  -- `Maybe Void` into the received JSON before decoding it, but it's brittle.
+  MappingWithIndex (PropToSchemaType schema) (Proxy sym) Skip (Maybe returns) where
+  mappingWithIndex _ _ _ = Nothing
 else instance propToSchemaType_ ::
   ( IsSymbol sym
   , Row.Cons sym subSchema rest schema
