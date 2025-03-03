@@ -2,6 +2,7 @@ module GraphQL.Client.QueryReturns.Test where
 
 import Prelude
 
+import Data.Const (Const(..))
 import Data.Identity (Identity(..))
 import Data.Maybe (Maybe(..))
 import Data.Newtype (class Newtype)
@@ -344,6 +345,19 @@ testIdentity =
             [ { int: 0 } ] +++ ((ArgR [ ignoreOrStr true, ignoreOrStr false ]) :: OrArg IgnoreArg _)
         }
           =>> { id: Identity id }
+    }
+
+testConst
+  :: Proxy
+       { users ::
+          Array
+             { id :: Int
+             , name :: Const String Number
+             }
+       }
+testConst =
+  queryReturns testSchemaProxy
+    {  users: { id, name: Const unit }
     }
 
 testArrayOf

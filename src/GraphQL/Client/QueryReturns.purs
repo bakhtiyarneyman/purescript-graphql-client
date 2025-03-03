@@ -8,6 +8,7 @@ module GraphQL.Client.QueryReturns
 
 import Prelude
 
+import Data.Const (Const(..))
 import Data.Identity (Identity(..))
 import Data.Maybe (Maybe)
 import Data.Newtype (class Newtype, unwrap)
@@ -58,7 +59,9 @@ else instance queryReturnsGqlType :: QueryReturnsAt at a q t => QueryReturnsAt a
 else instance queryReturnsApplyDirective :: QueryReturnsAt at a q t => QueryReturnsAt at a (ApplyDirective name args q) t where
   queryReturnsAtImpl at a _ = queryReturnsAtImpl at a (undefined :: q)
 else instance queryReturnsIdentity :: QueryReturnsAt at a q t => QueryReturnsAt at a (Identity q) (Identity t) where
-  queryReturnsAtImpl at a _ = Identity $ queryReturnsAtImpl at a (undefined :: q)  
+  queryReturnsAtImpl at a _ = Identity $ queryReturnsAtImpl at a (undefined :: q)
+else instance queryReturnsConst :: QueryReturnsAt at a q t => QueryReturnsAt at a (Const q b) (Const t b) where
+  queryReturnsAtImpl at a _ = Const $ queryReturnsAtImpl at a (undefined :: q)
 else instance queryReturnErrorBoundary :: QueryReturnsAt at a q t => QueryReturnsAt at a (ErrorBoundary q) (BoundaryResult Unit t) where
   queryReturnsAtImpl at a _ = ErrorBoundary.Result $ queryReturnsAtImpl at a (undefined :: q)
 else instance queryReturnsSpread ::

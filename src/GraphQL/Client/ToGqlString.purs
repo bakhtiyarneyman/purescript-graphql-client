@@ -35,6 +35,7 @@ import Prelude
 
 import Data.Array (fold, foldMap, intercalate, length, mapWithIndex)
 import Data.Array as Array
+import Data.Const (Const(..))
 import Data.Date (Date)
 import Data.DateTime (DateTime(..), Millisecond)
 import Data.DateTime as DT
@@ -113,6 +114,8 @@ else instance gqlQueryStringApplyDirective ::
       <> toGqlQueryStringImpl opts q
 else instance gqlQueryStringIdentity :: GqlQueryString a => GqlQueryString (Identity a) where
   toGqlQueryStringImpl opts (Identity a) = toGqlQueryStringImpl opts a
+else instance gqlQueryStringConst :: GqlQueryString a => GqlQueryString (Const a b) where
+  toGqlQueryStringImpl opts (Const a) = toGqlQueryStringImpl opts a
 else instance gqlQueryStringErrorBoundary :: GqlQueryString a => GqlQueryString (ErrorBoundary a) where
   toGqlQueryStringImpl opts (ErrorBoundary a) = toGqlQueryStringImpl opts a
 else instance gqlQueryStringArrayOf :: GqlQueryString a => GqlQueryString (ArrayOf a) where

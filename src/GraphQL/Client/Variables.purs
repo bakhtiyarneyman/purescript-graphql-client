@@ -27,6 +27,7 @@ import Prelude
 import Control.Apply (lift2)
 import Data.Argonaut.Core (Json, jsonEmptyObject)
 import Data.Argonaut.Encode (class EncodeJson, encodeJson)
+import Data.Const (Const(..))
 import Data.Identity (Identity)
 import Data.List (List(..), intercalate)
 import Data.Maybe (Maybe(..))
@@ -229,7 +230,12 @@ else instance varsTypeCheckedWithoutVars ::
 
 else instance varsTypeCheckedIdentity ::
   GetVar query {} =>
-  VarsTypeChecked schema (Identity query)  where
+  VarsTypeChecked schema (Identity query) where
+  getVarsJson _ _ = jsonEmptyObject
+  getVarsTypeNames _ _ = ""
+
+else instance varsTypeCheckedConst ::
+  VarsTypeChecked schema (Const b query) where
   getVarsJson _ _ = jsonEmptyObject
   getVarsTypeNames _ _ = ""
 
