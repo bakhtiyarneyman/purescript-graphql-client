@@ -71,21 +71,21 @@ else instance queryReturnsSpread ::
   , QueryReturnsAt at subSchema (Args args q) returns
   ) =>
   QueryReturnsAt at { | schema } (Spread (Proxy alias) args q) (SpreadRes returns) where
-  queryReturnsAtImpl at _ _ = undefined
+  queryReturnsAtImpl _ _ _ = undefined
 else instance queryReturnsSpreadNewtype ::
   ( QueryReturnsAt at { | schema } (Spread (Proxy alias) args q) (SpreadRes returns)
   , Newtype newtypeSchema { | schema }
   ) =>
   QueryReturnsAt at newtypeSchema (Spread (Proxy alias) args q) (SpreadRes returns) where
-  queryReturnsAtImpl at _ _ = undefined
-else instance queryReturnsArrayOf :: QueryReturnsAt at a q t => QueryReturnsAt at (Array a) (ArrayOf q) (Array t) where  
+  queryReturnsAtImpl _ _ _ = undefined
+else instance queryReturnsArrayOf :: QueryReturnsAt at a q t => QueryReturnsAt at (Array a) (ArrayOf q) (Array t) where
   queryReturnsAtImpl at _ (ArrayOf q) = pure $ queryReturnsAtImpl at (undefined :: a) q
 else instance queryReturnsArray :: QueryReturnsAt at a q t => QueryReturnsAt at (Array a) q (Array t) where
   queryReturnsAtImpl at _ q = pure $ queryReturnsAtImpl at (undefined :: a) q
 else instance queryReturnsMaybe :: QueryReturnsAt at a q t => QueryReturnsAt at (Maybe a) q (Maybe t) where
   queryReturnsAtImpl at _ q = pure $ queryReturnsAtImpl at (undefined :: a) q
 else instance queryReturnsUnion ::
-  HMapWithIndex (PropToSchemaType schema) { | query} { | returns } =>
+  HMapWithIndex (PropToSchemaType schema) { | query } { | returns } =>
   QueryReturnsAt at (GqlUnion schema) (GqlUnion query) (UnionReturned returns) where
   queryReturnsAtImpl _ _ _ = undefined
 else instance queryReturnsParamsArgs ::
@@ -104,7 +104,7 @@ else instance queryReturnsParamsNoArgs ::
 else instance queryReturnsRecord ::
   HMapWithIndex (PropToSchemaType schema) query returns =>
   QueryReturnsAt at { | schema } query returns where
-  queryReturnsAtImpl at = propToSchemaType
+  queryReturnsAtImpl _ = propToSchemaType
 else instance queryReturnsNewtype ::
   ( Newtype newtypeSchema { | schema }
   , QueryReturnsAt at { | schema } { | query } returns

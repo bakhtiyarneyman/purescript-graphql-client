@@ -243,11 +243,11 @@ else instance varsTypeCheckedErrorBoundary ::
   GetVar query {} =>
   VarsTypeChecked schema (ErrorBoundary query) where
   getVarsJson _ _ = jsonEmptyObject
-  getVarsTypeNames _ _ = ""  
+  getVarsTypeNames _ _ = ""
 
 else instance varsTypeCheckedUnion ::
   GetVar { | query } {} =>
-  VarsTypeChecked schema (GqlUnion query)  where
+  VarsTypeChecked schema (GqlUnion query) where
   getVarsJson _ _ = jsonEmptyObject
   getVarsTypeNames _ _ = ""
 

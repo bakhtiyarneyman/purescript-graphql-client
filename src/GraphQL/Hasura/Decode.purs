@@ -38,7 +38,7 @@ class DecodeHasura a where
 
 instance decodeHasuraUnit :: DecodeHasura Unit where
   decodeHasura = decodeJson
-  
+
 instance decodeHasuraBoolean :: DecodeHasura Boolean where
   decodeHasura = decodeJson
 
